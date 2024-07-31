@@ -1,5 +1,7 @@
-// client.cpp
+// application.cpp
 #include <iostream>
+#include <csignal>
+#include <ctime>
 #include <cstring>
 #include <arpa/inet.h>
 #include <unistd.h>
@@ -7,14 +9,39 @@
 #define PORT 8080
 #define BUFFER_SIZE 1024
 
-void sendMessage(int sockfd, struct sockaddr_in &servaddr, const std::string &message) {
+int sockfd;
+struct sockaddr_in servaddr;
+pid_t pid;
+
+std::string getCurrentTimestamp() {
+    std::time_t now = std::time(nullptr);
+    char buf[80];
+    std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", std::localtime(&now));
+    return std::string(buf);
+}
+
+void sendMessage(const std::string &message) {
     sendto(sockfd, message.c_str(), message.length(), MSG_CONFIRM, (const struct sockaddr *) &servaddr, sizeof(servaddr));
     std::cout << "Message sent: " << message << std::endl;
 }
 
+void signalHandler(int signum) {
+    std::string errorType;
+    if (signum == SIGINT) { // Ctrl+C
+        errorType = "INFO";
+    } else if (signum == SIGTSTP) { // Ctrl+Z
+        errorType = "WARNING";
+    } else if (signum == SIGQUIT) { // Ctrl+\
+        errorType = "CRITICAL";
+    }
+
+    std::string timestamp = getCurrentTimestamp();
+    std::string message = timestamp + " " + std::to_string(pid) + " " + errorType;
+    sendMessage(message);
+}
+
 int main() {
-    int sockfd;
-    struct sockaddr_in servaddr;
+    pid = getpid(); // Get process ID
 
     // Creating socket file descriptor
     if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
@@ -29,16 +56,16 @@ int main() {
     servaddr.sin_port = htons(PORT);
     servaddr.sin_addr.s_addr = INADDR_ANY;
 
-    std::string input;
-    while (true) {
-        std::cout << "Enter message (INFO, WARNING, CRITICAL): ";
-        std::getline(std::cin, input);
+    // Register signal handler
+    signal(SIGINT, signalHandler);  // Ctrl+C
+    signal(SIGTSTP, signalHandler); // Ctrl+Z
+    signal(SIGQUIT, signalHandler); // Ctrl+\
 
-        if (input == "INFO" || input == "WARNING" || input == "CRITICAL") {
-            sendMessage(sockfd, servaddr, input);
-        } else {
-            std::cout << "Invalid input. Please enter INFO, WARNING, or CRITICAL." << std::endl;
-        }
+    std::cout << "Running application. Use Ctrl+C for INFO, Ctrl+Z for WARNING, Ctrl+\\ for CRITICAL." << std::endl;
+
+    // Keep the application running to catch signals
+    while (true) {
+        pause(); // Wait for signals
     }
 
     close(sockfd);

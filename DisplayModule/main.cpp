@@ -4,6 +4,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+using namespace std;    
+
 #define PORT 8081
 #define BUFFER_SIZE 1024
 
@@ -22,6 +24,7 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
+    cout << " Ready to display " << endl;
     memset(&servaddr, 0, sizeof(servaddr));
     memset(&cliaddr, 0, sizeof(cliaddr));
 
