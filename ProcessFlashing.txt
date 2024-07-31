@@ -1,0 +1,46 @@
+Process of Flashing Images to Yacto
+1	sudo apt-get install gawk wget git-core diffstat unzip texinfo  gcc-multilib build-essential chrpath socat cpio python python3 python3-pip python3-pexpect xz-utils debianutils iputils-ping libsdl1.2-dev xterm
+	 git clone git://git.yoctoproject.org/poky -b dunfell
+	 git clone git://git.yoctoproject.org/meta-raspberrypi -b dunfell
+	 git clone https://github.com/openembedded/meta-openembedded.git -b dunfell
+2	Now open local.conf 
+	open ==> poky/build/conf/local.conf
+	Update: 
+	MACHINE ?= "raspberrypi4"
+
+3	Create layer:
+	inside ==> poky/build $ create-layers ../meta-errorlogger
+
+4	Adding layer:
+	inside ==> poky/build $ add-layers ../meta-errorlogger
+
+5	Adding Recipes:
+	1. errorserver
+	inside ==> /poky/meta-errorlogger/recipe-errorserver/errorserver/files
+	Paste the source files.
+	inside ==> /poky/meta-errorlogger/recipe-errorserver/errorserver
+	Run vi errorserve_0.1.bb
+	Now modify to run the command do_compile and do_install the errorserver 
+	2. displayserver
+	inside ==> /poky/meta-errorlogger/recipe-errorserver/errorserver/files
+	Paste the source files.
+	inside ==> /poky/meta-errorlogger/recipe-errorserver/errorserver
+	Run vi errorserve_0.1.bb
+	Now modify to run the command do_compile and do_install the errorserver 
+6	inside => poky/build
+	Install Recipes using :
+	1. bitbake errorserver
+	2. bitbake displayserver
+7	Now Run bitbake core-image-sato to create the image for raspberrypi 
+
+8	Now go to poky/build/tmp/deploy/images/raspberrypi/ 
+	search for core-image-sato.wic.bzip2 file
+9	Unzip the core-image-sato.wic.bzip2 
+	using command : bzip2 -f -d core-image-sato.wic.bzip2
+10	Now search for core-image-sato image using ls -l | grep core* 
+
+11	Now insert the microSD  card reader on the Linux command:
+	get the directory of sd card: dev/sdb [default]
+12	Now using dd command inside poky/build/tmp/deploy/images/raspberrypi/ 
+	dd -f poky/build/tmp/deploy/images/raspberrypi/core-image-sato.wic dev/sdb status=progress
+13	Now insert the microSD card on raspberrypi board and boot it.
