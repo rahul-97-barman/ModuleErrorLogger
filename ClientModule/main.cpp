@@ -1,4 +1,3 @@
-// application.cpp
 #include <iostream>
 #include <csignal>
 #include <ctime>
@@ -12,6 +11,7 @@
 int sockfd;
 struct sockaddr_in servaddr;
 pid_t pid;
+std::string hostname;
 
 std::string getCurrentTimestamp() {
     std::time_t now = std::time(nullptr);
@@ -36,12 +36,17 @@ void signalHandler(int signum) {
     }
 
     std::string timestamp = getCurrentTimestamp();
-    std::string message = timestamp + " " + std::to_string(pid) + " " + errorType;
+    std::string message = timestamp + " " + std::to_string(pid) + " " + hostname + " " + errorType;
     sendMessage(message);
 }
 
 int main() {
     pid = getpid(); // Get process ID
+
+    // Get hostname
+    char host[256];
+    gethostname(host, sizeof(host));
+    hostname = std::string(host);
 
     // Creating socket file descriptor
     if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {

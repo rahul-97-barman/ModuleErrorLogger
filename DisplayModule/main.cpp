@@ -1,16 +1,25 @@
-// display.cpp
 #include <iostream>
 #include <cstring>
 #include <arpa/inet.h>
 #include <unistd.h>
-
-using namespace std;    
+#include <sstream>
 
 #define PORT 8081
 #define BUFFER_SIZE 1024
 
 void displayMessage(const std::string &message) {
     std::cout << "Displaying message: " << message << std::endl;
+
+    std::istringstream iss(message);
+    std::string timestamp, pid, hostname, errorType;
+    if (iss >> timestamp >> pid >> hostname >> errorType) {
+        std::cout << "Timestamp: " << timestamp << std::endl;
+        std::cout << "Process ID: " << pid << std::endl;
+        std::cout << "Hostname: " << hostname << std::endl;
+        std::cout << "Error Type: " << errorType << std::endl;
+    } else {
+        std::cerr << "Error parsing message." << std::endl;
+    }
 }
 
 int main() {
@@ -23,8 +32,7 @@ int main() {
         perror("socket creation failed");
         exit(EXIT_FAILURE);
     }
-
-    cout << " Ready to display " << endl;
+    std::cout<<"Ready to Display the Data"<<std::endl;
     memset(&servaddr, 0, sizeof(servaddr));
     memset(&cliaddr, 0, sizeof(cliaddr));
 

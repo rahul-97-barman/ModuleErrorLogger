@@ -1,4 +1,3 @@
-// server.cpp
 #include <iostream>
 #include <cstring>
 #include <arpa/inet.h>
@@ -21,7 +20,7 @@ int main() {
         perror("socket creation failed");
         exit(EXIT_FAILURE);
     }
-    cout << " Server is Ready to recieve " << endl;
+    std::cout<<"Server is Ready"<<std::endl;
     memset(&servaddr, 0, sizeof(servaddr));
     memset(&cliaddr, 0, sizeof(cliaddr));
     memset(&displayaddr, 0, sizeof(displayaddr));
