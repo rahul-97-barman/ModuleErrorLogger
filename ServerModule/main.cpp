@@ -21,7 +21,7 @@ int main() {
         perror("socket creation failed");
         exit(EXIT_FAILURE);
     }
-
+    cout << " Server is Ready to recieve " << endl;
     memset(&servaddr, 0, sizeof(servaddr));
     memset(&cliaddr, 0, sizeof(cliaddr));
     memset(&displayaddr, 0, sizeof(displayaddr));
