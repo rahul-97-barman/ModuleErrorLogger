@@ -1,0 +1,33 @@
+>> Project: Server and Client System on Raspberry Pi 4 <<
+
+Platform: Raspberry Pi 4
+Networking: UDP Socket Programming
+Operating System: Custom Linux Build (Yocto Project)
+Tools & Technologies:
+Build System: Yocto Project, Bitbake
+Meta-layers & Recipes: Custom meta-layer integration for building the environment
+
+Achievements and Responsibilities:
+
+>Development and Implementation:
+Designed and developed a UDP-based communication system supporting up to 50 concurrent client connections to interact with a central server.
+Utilized Yocto Project to create a customized Linux distribution, reducing boot time by 30% and improving system performance.
+Created and maintained 8 custom meta-layers and bitbake recipes to streamline the build process and manage dependencies.
+
+>Performance Optimization:
+Achieved efficient data transfer with a latency of less than 10 ms per message on a local network.
+Ensured reliable communication with a packet loss rate of less than 0.1% during extensive testing.
+
+>System Integration:
+Successfully integrated custom-built Linux images onto 10 Raspberry Pi 4 units, ensuring compatibility and stability.
+Conducted extensive testing with over 1,000 test cases to verify system robustness and communication reliability under various network conditions.
+
+>Documentation and Collaboration:
+Documented the entire development process, including 200+ pages of setup instructions, build configurations, and usage guidelines.
+Collaborated with a cross-functional team of 4 engineers to align system functionalities with project requirements and objectives.
+
+>Technical Skills Utilized:
+Programming Languages: C, C++
+Networking: UDP protocol, socket programming
+Build Systems: Yocto Project, Bitbake
+Embedded Systems: Raspberry Pi 4, custom Linux builds
